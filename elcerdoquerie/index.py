@@ -1,13 +1,10 @@
+from models import db, Entry
+import logging
 import cgi
 import os
-from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
-
-class Entry(db.Model):
-    content = db.StringProperty(multiline=True)
-    date = db.DateTimeProperty(auto_now_add=True)
 
 class Index(webapp.RequestHandler):
     def get(self):
@@ -16,12 +13,13 @@ class Index(webapp.RequestHandler):
         entries = db.GqlQuery("SELECT * FROM Entry ORDER BY date ASC LIMIT 10")
         content = "<p>hello, world!!</p>" + "<ul>" + "".join(["<li>"+cgi.escape(entry.content)+"</li>" for entry in entries]) + "</ul>"
 
-        template_params = { "title": "coucou", "content": content }
+        template_params = {"title":"coucou","content":content}
         template_path   = os.path.join(os.path.dirname(__file__),"index.html")
         self.response.out.write(template.render(template_path,template_params))
 
 class Sign(webapp.RequestHandler):
     def post(self):
+        logging.info("adding new entry: %s" % repr(self.request.get('content')))
         content = self.request.get('content')
         if content:
             entry = Entry()
@@ -31,6 +29,7 @@ class Sign(webapp.RequestHandler):
 
 class Clear(webapp.RequestHandler):
     def get(self):
+        logging.info("clearing all entries")
         db.delete(Entry.all())
         self.redirect("/")
 
