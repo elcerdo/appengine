@@ -1,4 +1,4 @@
-from models import db, Entry
+from models import *
 import logging
 import cgi
 import os
@@ -10,8 +10,10 @@ class Index(webapp.RequestHandler):
     def get(self):
         self.response.headers["Content-type"] = "text/html;utf-8"
 
+        content = "<p>" + "".join(['<img src="/logos/%s" />' % key for key in Logo.all(keys_only=True)]) + "</p>"
+
         entries = db.GqlQuery("SELECT * FROM Entry ORDER BY date ASC LIMIT 10")
-        content = "<p>hello, world!!</p>" + "<ul>" + "".join(["<li>"+cgi.escape(entry.content)+"</li>" for entry in entries]) + "</ul>"
+        content += "<p>hello, world!!</p>" + "<ul>" + "".join(["<li>"+cgi.escape(entry.content)+"</li>" for entry in entries]) + "</ul>"
 
         template_params = {"title":"coucou","content":content}
         template_path   = os.path.join(os.path.dirname(__file__),"index.html")
@@ -33,8 +35,7 @@ class Clear(webapp.RequestHandler):
         db.delete(Entry.all())
         self.redirect("/")
 
-application = webapp.WSGIApplication([("/",Index),("/sign",Sign),("/clear",Clear)],debug=True)
-
 if __name__=="__main__":
+    application = webapp.WSGIApplication([("/",Index),("/sign",Sign),("/clear",Clear)],debug=True)
     run_wsgi_app(application)
 

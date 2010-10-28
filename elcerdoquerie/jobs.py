@@ -1,4 +1,4 @@
-from models import db, Logo
+from models import *
 import re
 import logging
 import cgi
@@ -52,9 +52,7 @@ class Fetch(webapp.RequestHandler):
 
         finish_job()
 
-
-application = webapp.WSGIApplication([("/jobs/fetch-reddit",Fetch)],debug=True)
-
 if __name__=="__main__":
+    application = webapp.WSGIApplication([("/jobs/fetch-reddit",Fetch)],debug=True)
     run_wsgi_app(application)
 

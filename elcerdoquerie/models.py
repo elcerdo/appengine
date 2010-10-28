@@ -1,4 +1,4 @@
-all = ["db","Entry"]
+__all__ = ["db","Logo","Entry"]
 
 from google.appengine.ext import db
 
@@ -7,8 +7,7 @@ class Entry(db.Model):
     date = db.DateTimeProperty(auto_now_add=True)
 
 class Logo(db.Model):
-    image = db.BlobProperty()
+    image = db.BlobProperty(default=None)
     comment = db.StringProperty()
     url = db.StringProperty()
     date = db.DateTimeProperty(auto_now_add=True)
-
