@@ -10,12 +10,10 @@ class Index(webapp.RequestHandler):
     def get(self):
         self.response.headers["Content-type"] = "text/html;utf-8"
 
-        content = "<p>" + "".join(['<img src="/logos/%s" />' % key for key in Logo.all(keys_only=True)]) + "</p>"
+        logos = Logo.all()
+        entries = Entry.all()
 
-        entries = db.GqlQuery("SELECT * FROM Entry ORDER BY date ASC LIMIT 10")
-        content += "<p>hello, world!!</p>" + "<ul>" + "".join(["<li>"+cgi.escape(entry.content)+"</li>" for entry in entries]) + "</ul>"
-
-        template_params = {"title":"coucou","content":content}
+        template_params = {"title":"coucou","logos":logos,"entries":entries}
         template_path   = os.path.join(os.path.dirname(__file__),"index.html")
         self.response.out.write(template.render(template_path,template_params))
 

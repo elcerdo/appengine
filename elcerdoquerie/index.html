@@ -4,7 +4,18 @@
 		<title>elcerdoquerie - {{title}}</title>
 	</head>
 	<body>
-        {{content}}
+        <h1>logos</h1>
+        <ul>
+        {% for logo in logos %}
+        <li><img src="/logos/{{logo.key}}" /> {{logo.comment}} {{logo.date}}</li>
+        {% endfor %}
+        </ul>
+        <h1>comments</h1>
+        <ul>
+        {% for entry in entries %}
+        <li>{{entry.content}}</li>
+        {% endfor %}
+        </ul>
         <form action="/sign" method="post">
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="sign"></div>

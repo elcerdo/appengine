@@ -8,7 +8,8 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-re_headerimg = re.compile(r'''<img +id=('header-img'|"header-img") +src=['"]([a-z/:.0-9_?=]+)['"] +.*>''')
+re_headerimg     = re.compile(r'''<img +id=('header-img'|"header-img") +src=['"]([a-z/:.0-9_?=]+)['"] +.*>''')
+re_headercomment = re.compile(r'''<a +title="([^"]+)" +.*>''')
 
 class Fetch(webapp.RequestHandler):
     def get(self):
@@ -41,10 +42,19 @@ class Fetch(webapp.RequestHandler):
             items.append({"title":"failed to get reddit logo","status":"err"})
             finish_job()
             return
-        items.append({"title":"got reddit logo","status":"ok"})
+        items.append({"title":"got reddit logo","status":"ok","data":'<a href="%s">%s</a>' % (cgi.escape(reddit_logo_url),cgi.escape(reddit_logo_url))})
+
+        match = re_headercomment.search(reddit_frontpage.content)
+        comment = "undefined"
+        if match is None:
+            items.append({"title":"failed to find reddit logo comment","status":"warn"})
+        else:
+            comment = match.groups()[0]
+            items.append({"title":"found reddit logo comment","status":"ok","data":cgi.escape(comment)})
 
         logo = Logo()
-        logo.comment = "undefined for now"
+        logo.mainpage = reddit_frontpage
+        logo.comment = comment
         logo.image = db.Blob(reddit_logo.content)
         logo.url = reddit_logo_url
         logo.put()

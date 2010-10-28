@@ -10,4 +10,5 @@ class Logo(db.Model):
     image = db.BlobProperty(default=None)
     comment = db.StringProperty()
     url = db.StringProperty()
+    mainpage = db.StringProperty(multiline=True)
     date = db.DateTimeProperty(auto_now_add=True)
