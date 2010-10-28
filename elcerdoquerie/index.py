@@ -2,6 +2,7 @@ from models import *
 import logging
 import cgi
 import os
+from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -10,7 +11,12 @@ class Index(webapp.RequestHandler):
     def get(self):
         self.response.headers["Content-type"] = "text/html;utf-8"
 
-        logos = Logo.all()
+        logos = memcache.get("logos")
+        if logos is None:
+            logos = Logo.all()
+            if not memcache.add("logos",logos,3600):
+                logging.error("error setting memcache")
+
         entries = Entry.all()
 
         template_params = {"title":"coucou","logos":logos,"entries":entries}
