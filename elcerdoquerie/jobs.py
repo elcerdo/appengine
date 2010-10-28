@@ -53,7 +53,7 @@ class Fetch(webapp.RequestHandler):
             items.append({"title":"found reddit logo comment","status":"ok","data":cgi.escape(comment)})
 
         logo = Logo()
-        logo.mainpage = reddit_frontpage
+        logo.mainpage = db.Text(reddit_frontpage.content,encoding='utf-8')
         logo.comment = comment
         logo.image = db.Blob(reddit_logo.content)
         logo.url = reddit_logo_url
