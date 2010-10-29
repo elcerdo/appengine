@@ -4,11 +4,12 @@ import logging
 import cgi
 import os
 from google.appengine.api import urlfetch
+from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-re_headerimg     = re.compile(r'''<img +id=('header-img'|"header-img") +src=['"]([a-z/:.0-9_?=]+)['"] +.*>''')
+re_headerimg     = re.compile(r'''<img +id=('header-img'|"header-img") +src=['"]([a-zA-Z/:.0-9_?=]+)['"] +.*>''')
 re_headercomment = re.compile(r'''<a +title="([^"]+)" +.*>''')
 
 class Fetch(webapp.RequestHandler):
@@ -58,6 +59,7 @@ class Fetch(webapp.RequestHandler):
         logo.image = db.Blob(reddit_logo.content)
         logo.url = reddit_logo_url
         logo.put()
+        memcache.delete("logos")
         items.append({"title":"saved reddit logo","status":"ok","data":"key=%s<br/>comment=%s<br/>url=%s" % (logo.key(),cgi.escape(logo.comment),cgi.escape(logo.url))})
 
         finish_job()

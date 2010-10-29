@@ -13,6 +13,6 @@ class DisplayLogo(webapp.RequestHandler):
             self.redirect("/static/default.png")
 
 if __name__=="__main__":
-    application = webapp.WSGIApplication([("/logos/([a-zA-z0-9]+)",DisplayLogo)],debug=True)
+    application = webapp.WSGIApplication([("/logos/(.*)",DisplayLogo)],debug=True)
     run_wsgi_app(application)
 
