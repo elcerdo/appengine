@@ -14,7 +14,7 @@ class Index(webapp.RequestHandler):
         logos = memcache.get("logos")
         if logos is None:
             logos = Logo.all().order("-date").fetch(20)
-            if not memcache.add("logos",logos,3600):
+            if not memcache.add("logos",logos,10):
                 logging.error("error setting memcache")
 
         entries = Entry.all()

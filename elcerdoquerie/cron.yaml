@@ -1,6 +1,6 @@
 cron:
 - description: reddit logo fetching
   url: /jobs/fetch-reddit
-  schedule: every 2 hours
+  schedule: every 12 hours
 
 
