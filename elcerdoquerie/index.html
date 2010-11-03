@@ -9,11 +9,15 @@
 	</head>
 	<body>
         <h1>logos</h1>
-        <ul>
-        {% for logo in logos %}
-        <li><img src="/logos/{{logo.key}}" /> {{logo.comment}} {{logo.date}}</li>
-        {% endfor %}
-        </ul>
+	<table>
+	{% for line in lines %}
+		<tr>
+		{% for logo in line %}
+		<td><img src="/logos/{{logo.key}}" /><br/>{{logo.comment}}<br/>{{logo.date}}</td>
+		{% endfor %}
+		</tr>
+	{% endfor %}
+        </table>
         <h1>comments</h1>
         <ul>
         {% for entry in entries %}

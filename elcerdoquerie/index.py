@@ -7,6 +7,10 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+def chunk(ll,nn):
+    for k in xrange(0,len(ll),nn):
+        yield ll[k:k+nn]
+
 class Index(webapp.RequestHandler):
     def get(self):
         self.response.headers["Content-type"] = "text/html;utf-8"
@@ -16,12 +20,13 @@ class Index(webapp.RequestHandler):
             logos = Logo.all().order("-date").fetch(20)
             if not memcache.add("logos",logos,600):
                 logging.error("error setting memcache")
+        lines = [line for line in chunk(logos,5)]
 
         entries = Entry.all()
 
         stats = memcache.get_stats()
 
-        template_params = {"title":"coucou","logos":logos,"entries":entries,"stats":stats}
+        template_params = {"title":"coucou","lines":lines,"entries":entries,"stats":stats}
         template_path   = os.path.join(os.path.dirname(__file__),"index.html")
         self.response.out.write(template.render(template_path,template_params))
 
