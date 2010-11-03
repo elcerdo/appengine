@@ -10,7 +10,7 @@ class DisplayLogo(webapp.RequestHandler):
             logo = memcache.get("logo/%s"%key)
             if logo is None:
                 logo = Logo.get(key)
-                if not memcache.add("logo/%s"%key,logo,5):
+                if not memcache.add("logo/%s"%key,logo,600):
                     logging.error("error setting memcache")
             self.response.headers["Content-type"] = "image/png"
             self.response.out.write(logo.image)

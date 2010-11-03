@@ -2,6 +2,10 @@
 	<head>
 		<link rel="icon" type="image/ico" href="/favicon.ico" />
 		<title>elcerdoquerie - {{title}}</title>
+		<style type="text/css">
+		p.stats { font-size: 8pt; font-family: sans-serif; color: gray; }
+		a.button { text-decoration: none; margin: 2px; border: 1px solid black; padding: 1px; background-color: grey; color: white;}
+		</style>
 	</head>
 	<body>
         <h1>logos</h1>
@@ -20,7 +24,20 @@
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="sign"></div>
         </form>
-        <a href="/clear">clear entries</a>
+	<p>
+		<a class="button" href="/clear">clear entries</a>
+		<a class="button" href="/clear-cache">clear cache</a>
+	</p>
+	{% if stats %}
+	<p class="stats">
+	hits: {{stats.hits}}<br/>
+	misses: {{stats.misses}}<br/>
+	bytes_hits: {{stats.byte_hits}}<br/>
+	items: {{stats.items}}<br/>
+	bytes: {{stats.bytes}}<br/>
+	oldest_item_age: {{stats.oldest_item_age}}<br/>
+	</p>
+	{% endif %}
 	</body>
 </html>
 
