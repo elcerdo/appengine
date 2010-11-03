@@ -3,6 +3,7 @@ import re
 import logging
 import cgi
 import os
+from google.appengine.api import mail
 from google.appengine.api import urlfetch
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
@@ -22,11 +23,19 @@ class Fetch(webapp.RequestHandler):
             template_params = {"jobtitle":"reddit logo fetching","items":[stuff for stuff in enumerate(items)]}
             template_path   = os.path.join(os.path.dirname(__file__),"jobs.html")
             self.response.out.write(template.render(template_path,template_params))
+        
+        def send_mail(body):
+            message = mail.EmailMessage(sender="elcerdo appengine <elcerdoquerie@appspot.com>",subject="[appengine] failed to fetch reddit logo")
+            message.to = "pierre gueth <pierre.gueth@gmail.com>"
+            message.body = body
+            message.send()
+
 
         reddit_frontpage = urlfetch.fetch("http://www.reddit.com")
         if reddit_frontpage.status_code != 200:
             items.append({"title":"failed to get reddit frontpage","status":"err"})
             finish_job()
+            send_mail(repr(items))
             return
         items.append({"title":"got reddit frontpage","status":"ok","data":cgi.escape(reddit_frontpage.content)})
 
@@ -34,6 +43,7 @@ class Fetch(webapp.RequestHandler):
         if match is None:
             items.append({"title":"failed to find reddit logo image","status":"err"})
             finish_job()
+            send_mail(repr(items))
             return
         reddit_logo_url = match.groups()[1]
         items.append({"title":"found reddit logo image","status":"ok","data":'<a href="%s">%s</a>' % (cgi.escape(reddit_logo_url),cgi.escape(reddit_logo_url))})
@@ -42,6 +52,7 @@ class Fetch(webapp.RequestHandler):
         if reddit_frontpage.status_code != 200:
             items.append({"title":"failed to get reddit logo","status":"err"})
             finish_job()
+            send_mail(repr(items))
             return
         items.append({"title":"got reddit logo","status":"ok","data":'<a href="%s">%s</a>' % (cgi.escape(reddit_logo_url),cgi.escape(reddit_logo_url))})
 
@@ -63,6 +74,7 @@ class Fetch(webapp.RequestHandler):
         items.append({"title":"saved reddit logo","status":"ok","data":"key=%s<br/>comment=%s<br/>url=%s" % (logo.key(),cgi.escape(logo.comment),cgi.escape(logo.url))})
 
         finish_job()
+        send_mail("success")
 
 if __name__=="__main__":
     application = webapp.WSGIApplication([("/jobs/fetch-reddit",Fetch)],debug=True)
