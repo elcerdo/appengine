@@ -25,7 +25,7 @@ class Fetch(webapp.RequestHandler):
             self.response.out.write(template.render(template_path,template_params))
         
         def send_mail(body):
-            message = mail.EmailMessage(sender="elcerdo appengine <elcerdoquerie@appspot.com>",subject="[appengine] failed to fetch reddit logo")
+            message = mail.EmailMessage(sender="elcerdo appengine <jobs@elcerdoquerie.appspotmail.com>",subject="[appengine] failed to fetch reddit logo")
             message.to = "pierre gueth <pierre.gueth@gmail.com>"
             message.body = body
             message.send()
