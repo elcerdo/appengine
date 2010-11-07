@@ -74,7 +74,6 @@ class Fetch(webapp.RequestHandler):
         items.append({"title":"saved reddit logo","status":"ok","data":"key=%s<br/>comment=%s<br/>url=%s" % (logo.key(),cgi.escape(logo.comment),cgi.escape(logo.url))})
 
         finish_job()
-        send_mail("success")
 
 if __name__=="__main__":
     application = webapp.WSGIApplication([("/jobs/fetch-reddit",Fetch)],debug=True)
