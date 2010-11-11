@@ -4,6 +4,9 @@ runtime: python
 api_version: 1
 
 handlers:
+#
+# static data
+#
 - url: /favicon.ico
   static_files: static/favicon.ico
   upload: static/favicon.ico
@@ -12,11 +15,20 @@ handlers:
   static_files: static/\1
   upload: static/.*\.png
 
+- url: /js
+  static_dir: js
+
+- url: /css
+  static_dir: css
+
+#
+# script routing
+#
 - url: /jobs/.*
   script: jobs.py
   login: admin
 
-- url: /logos/[a-zA-Z0-9]+
+- url: /logos/.*
   script: logos.py
 
 - url: /.*

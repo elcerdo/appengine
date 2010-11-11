@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% block extrahead %}
+<script type="text/javascript">
+	$(function() { alert("rout"); });
+</script>
+{% endblock %}
+
 {% block content %}
 	<h1>logos</h1>
 	<table>
