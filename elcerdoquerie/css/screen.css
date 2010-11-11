@@ -2,4 +2,39 @@ body {
     font-family: sans-serif;
     font-size: 10pt;
     margin: 3em;
+    background-color: white;
+}
+
+div#main-container {
+    background-color: #f4f4f4;
+    padding: 8px;
+    border: 1px solid #CDCDCD;
+    width: 900px;
+    margin: auto;
+}
+
+div#main-title {
+    font-size: 3em;
+    padding: 5px 5px 5px 25px;
+}
+
+table#logo-table {
+    margin: auto;
+    background-color: red;
+}
+
+table#logo-table img.logo {
+    cursor: pointer;
+}
+
+div#logo-details {
+    width: 410px;
+    margin: 25px auto;
+    padding: 5px;
+    text-align: center;
+}
+
+div#logo-details img {
+    margin: 5px;
+    width: 400px;
 }

@@ -21,11 +21,11 @@ class Fetch(webapp.RequestHandler):
         items = []
         def finish_job():
             template_params = {"title":"reddit logo fetching","items":[stuff for stuff in enumerate(items)]}
-            template_path   = os.path.join(os.path.dirname(__file__),"jobs.html")
+            template_path   = os.path.join(os.path.dirname(__file__),"job.html")
             self.response.out.write(template.render(template_path,template_params))
         
         def send_mail(body):
-            message = mail.EmailMessage(sender="elcerdo appengine <jobs@elcerdoquerie.appspotmail.com>",subject="[appengine] failed to fetch reddit logo")
+            message = mail.EmailMessage(sender="elcerdo appengine <fetch-reddit@elcerdoquerie.appspotmail.com>",subject="[appengine] failed to fetch reddit logo")
             message.to = "pierre gueth <pierre.gueth@gmail.com>"
             message.body = body
             message.send()
@@ -76,6 +76,6 @@ class Fetch(webapp.RequestHandler):
         finish_job()
 
 if __name__=="__main__":
-    application = webapp.WSGIApplication([("/jobs/fetch-reddit",Fetch)],debug=True)
+    application = webapp.WSGIApplication([("/job/fetch-reddit",Fetch)],debug=True)
     run_wsgi_app(application)
 

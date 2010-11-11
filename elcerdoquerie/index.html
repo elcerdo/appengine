@@ -2,35 +2,53 @@
 
 {% block extrahead %}
 <script type="text/javascript">
-	$(function() { alert("rout"); });
+	$(function() {
+		$(".button").button();
+		$("img.logo").click(function(evt) {
+            var key = this.alt;
+            $.get("/details/"+key,function(data) {
+                $("#logo-details-comment").text($("comment",data).text());
+                $("#logo-details-date").text($("date",data).text());
+                $("#logo-details-image").each(function() { this.src = "/logo/"+key; });
+                $("#logo-details").slideDown();
+            });
+		});
+	});
 </script>
 {% endblock %}
 
 {% block content %}
 	<h1>logos</h1>
-	<table>
+	<table id="logo-table">
 	{% for line in lines %}
 		<tr>
-		{% for logo in line %}
-		<td><img src="/logos/{{logo.key}}" /><br/>{{logo.comment}}<br/>{{logo.date}}</td>
+		{% for logokey in line %}
+		<td><img class="logo" src="/logo/{{logokey}}" alt="{{logokey}}" /></td>
 		{% endfor %}
 		</tr>
 	{% endfor %}
-        </table>
-        <h1>comments</h1>
-        <ul>
-        {% for entry in entries %}
-        <li>{{entry.content}}</li>
-        {% endfor %}
-        </ul>
-        <form action="/sign" method="post">
-            <div><textarea name="content" rows="3" cols="60"></textarea></div>
-            <div><input type="submit" value="sign"></div>
-        </form>
-	<p>
-		<a class="button" href="/clear">clear entries</a>
-		<a class="button" href="/clear-cache">clear cache</a>
-	</p>
+    </table>
+    <div id="logo-details" class="ui-widget ui-widget-content ui-helper-hidden">
+        <img id="logo-details-image" src="" alt="prout"/>
+        <div id="logo-details-comment"></div>
+        <div id="logo-details-date"></div>
+    </div>
+
+
+    <h1>comments</h1>
+    <ul>
+    {% for entry in entries %}
+    <li>{{entry.content}}</li>
+    {% endfor %}
+    </ul>
+    <form action="/sign" method="post">
+    <textarea name="content" rows="3" cols="60"></textarea>
+    <br/>
+    <input class="button" name="sign" type="submit" value="sign">
+    <a class="button" href="/clear">clear entries</a>
+    <a class="button" href="/clear-cache">clear cache</a>
+    </form>
+
 	{% if stats %}
 	<p class="stats">
 	hits: {{stats.hits}}<br/>

@@ -1,6 +1,5 @@
 from models import *
 import logging
-import cgi
 import os
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
@@ -17,12 +16,12 @@ class Index(webapp.RequestHandler):
 
         logos = memcache.get("logos")
         if logos is None:
-            logos = Logo.all().order("-date").fetch(20)
+            logos = Logo.all(keys_only=True).order("-date").fetch(28)
             try:
                 memcache.add("logos",logos,600)
             except ValueError:
                 logging.error("error setting memcache")
-        lines = [line for line in chunk(logos,5)]
+        lines = [line for line in chunk(logos,7)]
 
         entries = Entry.all()
 

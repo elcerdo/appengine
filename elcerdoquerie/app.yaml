@@ -24,12 +24,15 @@ handlers:
 #
 # script routing
 #
-- url: /jobs/.*
-  script: jobs.py
+- url: /job/.*
+  script: job.py
   login: admin
 
-- url: /logos/.*
-  script: logos.py
+- url: /logo/.*
+  script: logo.py
+
+- url: /details/.*
+  script: logo.py
 
 - url: /.*
   script: index.py
