@@ -1,0 +1,61 @@
+python_preamble:
+- import: mytransform
+- import: base64
+- import: re
+- import: google.appengine.ext.bulkload.transform
+- import: google.appengine.ext.bulkload.bulkloader_wizard
+- import: google.appengine.ext.db
+- import: google.appengine.api.datastore
+- import: google.appengine.api.users
+
+transformers:
+- kind: Entry
+  connector: simplexml
+  connector_options:
+    xpath_to_nodes: /Entries/Entry
+    style: element_centric
+  property_map:
+    - property: __key__
+      external_name: key
+      export_transform: transform.key_id_or_name_as_string
+
+    - property: content
+      external_name: content
+
+    - property: date
+      external_name: date
+      import_transform: transform.import_date_time('%Y-%m-%dT%H:%M:%S')
+      export_transform: transform.export_date_time('%Y-%m-%dT%H:%M:%S')
+
+
+- kind: Logo
+  connector: simplexml
+  connector_options:
+    xpath_to_nodes: /Logos/Logo
+    style: element_centric
+  property_map:
+    - property: __key__
+      external_name: key
+      export_transform: transform.key_id_or_name_as_string
+
+    - property: comment
+      external_name: comment
+
+    - property: date
+      external_name: date
+      import_transform: transform.import_date_time('%Y-%m-%dT%H:%M:%S')
+      export_transform: transform.export_date_time('%Y-%m-%dT%H:%M:%S')
+
+    - property: image
+      external_name: image
+      export_transform: mytransform.blob_to_file(directory_hint="Logo-image")
+      #import_transform: transform.blobproperty_from_base64
+      #export_transform: base64.b64encode
+
+    - property: mainpage
+      external_name: mainpage
+      import_transform: db.Text
+
+    - property: url
+      external_name: url
+
