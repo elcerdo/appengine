@@ -1,29 +1,30 @@
-<html>
-	<head>
-		<link rel="icon" type="image/ico" href="/favicon.ico" />
-		<title>elcerdoquerie - job - {{jobtitle}}</title>
-        <style type="text/css">
-            li.err  {background-color: red;}
-            li.warn {background-color: orange;}
-            span.button {cursor: pointer; margin: 2px; border: 1px solid black; padding: 1px; background-color: grey; color: white;}
-            div.item_data {display: none;}
-        </style>
-	</head>
-    <body>
-        <h1>{{jobtitle}} report:</h1>
-        <ul>
-        {% for item in items %}
-            <li class="{{item.1.status}}">{{item.1.title}}
-            {% if item.1.data %}
-                <span class="button" onclick="document.getElementById('item_data{{item.0}}').style.display='block'">show</span>
-                <span class="button" onclick="document.getElementById('item_data{{item.0}}').style.display='none'">hide</span>
-            {% endif %}
-            </li>
-            {% if item.1.data %}
-            <div id="item_data{{item.0}}" class="item_data">{{item.1.data}}</div>
-            {% endif %}
-        {% endfor %}
-        </ul>
-        <p>{{debug}}</p>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %} - job{% if title %} - {{title}}{% endif %}{% endblock %} 
+
+{% block extrahead %}
+	<style type="text/css">
+	    li.err  {background-color: red;}
+	    li.warn {background-color: orange;}
+	    span.button {cursor: pointer; margin: 2px; border: 1px solid black; padding: 1px; background-color: grey; color: white;}
+	    div.item_data {display: none;}
+	</style>
+{% endblock %}
+
+{% block content %}
+	<h1>{{title}} report:</h1>
+	<ul>
+	{% for item in items %}
+	    <li class="{{item.1.status}}">{{item.1.title}}
+	    {% if item.1.data %}
+		<span class="button" onclick="document.getElementById('item_data{{item.0}}').style.display='block'">show</span>
+		<span class="button" onclick="document.getElementById('item_data{{item.0}}').style.display='none'">hide</span>
+	    {% endif %}
+	    </li>
+	    {% if item.1.data %}
+	    <div id="item_data{{item.0}}" class="item_data">{{item.1.data}}</div>
+	    {% endif %}
+	{% endfor %}
+	</ul>
+	<p>{{debug}}</p>
+{% endblock %}

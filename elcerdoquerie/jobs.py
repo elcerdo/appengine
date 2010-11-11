@@ -20,7 +20,7 @@ class Fetch(webapp.RequestHandler):
 
         items = []
         def finish_job():
-            template_params = {"jobtitle":"reddit logo fetching","items":[stuff for stuff in enumerate(items)]}
+            template_params = {"title":"reddit logo fetching","items":[stuff for stuff in enumerate(items)]}
             template_path   = os.path.join(os.path.dirname(__file__),"jobs.html")
             self.response.out.write(template.render(template_path,template_params))
         
