@@ -16,7 +16,7 @@ class Index(webapp.RequestHandler):
 
         logos = memcache.get("logos")
         if logos is None:
-            logos = Logo.all(keys_only=True).order("-date").fetch(28)
+            logos = Logo.all(keys_only=True).order("-date").fetch(35)
             try:
                 memcache.add("logos",logos,600)
             except ValueError:

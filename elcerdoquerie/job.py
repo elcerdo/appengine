@@ -20,7 +20,7 @@ class Fetch(webapp.RequestHandler):
 
         items = []
         def finish_job():
-            template_params = {"title":"reddit logo fetching","items":[stuff for stuff in enumerate(items)]}
+            template_params = {"title":"reddit logo fetching","items":items}
             template_path   = os.path.join(os.path.dirname(__file__),"job.html")
             self.response.out.write(template.render(template_path,template_params))
         
@@ -37,7 +37,7 @@ class Fetch(webapp.RequestHandler):
             finish_job()
             send_mail(repr(items))
             return
-        items.append({"title":"got reddit frontpage","status":"ok","data":cgi.escape(reddit_frontpage.content)})
+        items.append({"title":"got reddit frontpage","status":"ok","data":cgi.escape("size=%d" % len(reddit_frontpage.content))})
 
         match = re_headerimg.search(reddit_frontpage.content)
         if match is None:
@@ -46,7 +46,7 @@ class Fetch(webapp.RequestHandler):
             send_mail(repr(items))
             return
         reddit_logo_url = match.groups()[1]
-        items.append({"title":"found reddit logo image","status":"ok","data":'<a href="%s">%s</a>' % (cgi.escape(reddit_logo_url),cgi.escape(reddit_logo_url))})
+        items.append({"title":"found reddit logo image","status":"ok","data":cgi.escape(reddit_logo_url)})
 
         reddit_logo =  urlfetch.fetch(reddit_logo_url)
         if reddit_frontpage.status_code != 200:
@@ -54,7 +54,7 @@ class Fetch(webapp.RequestHandler):
             finish_job()
             send_mail(repr(items))
             return
-        items.append({"title":"got reddit logo","status":"ok","data":'<a href="%s">%s</a>' % (cgi.escape(reddit_logo_url),cgi.escape(reddit_logo_url))})
+        items.append({"title":"got reddit logo","status":"ok"})
 
         match = re_headercomment.search(reddit_frontpage.content)
         comment = "undefined"
@@ -71,7 +71,7 @@ class Fetch(webapp.RequestHandler):
         logo.url = reddit_logo_url
         logo.put()
         memcache.delete("logos")
-        items.append({"title":"saved reddit logo","status":"ok","data":"key=%s<br/>comment=%s<br/>url=%s" % (logo.key(),cgi.escape(logo.comment),cgi.escape(logo.url))})
+        items.append({"title":"saved reddit logo","status":"ok","data":"key=%s comment=%s url=%s" % (logo.key(),cgi.escape(logo.comment),cgi.escape(logo.url))})
 
         finish_job()
 

@@ -5,13 +5,13 @@
 	$(function() {
 		$(".button").button();
 		$("img.logo").click(function(evt) {
-            var key = this.alt;
-            $.get("/details/"+key,function(data) {
-                $("#logo-details-comment").text($("comment",data).text());
-                $("#logo-details-date").text($("date",data).text());
-                $("#logo-details-image").each(function() { this.src = "/logo/"+key; });
-                $("#logo-details").slideDown();
-            });
+			var key = this.alt;
+			$.get("/details/"+key,function(data) {
+				$("#logo-details-comment").text($("comment",data).text());
+				$("#logo-details-date").text($("date",data).text());
+				$("#logo-details-image").each(function() { this.src = "/logo/"+key; });
+				$("#logo-details").slideDown();
+			});
 		});
 	});
 </script>
@@ -19,7 +19,7 @@
 
 {% block content %}
 	<h1>logos</h1>
-	<table id="logo-table">
+	<table class="ui-widget-content" id="logo-table">
 	{% for line in lines %}
 		<tr>
 		{% for logokey in line %}

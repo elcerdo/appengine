@@ -20,7 +20,7 @@ div#main-title {
 
 table#logo-table {
     margin: auto;
-    background-color: red;
+    padding: 5px;
 }
 
 table#logo-table img.logo {
