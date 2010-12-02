@@ -4,6 +4,9 @@
 <script type="text/javascript">
 	$(function() {
 		$(".button").button();
+		$("#stats-memcache-button").button({label:"show memchache stats",icons:{primary:"ui-icon-wrench",secondary:"ui-icon-triangle-1-s"}}).click(function(evt) {
+			$("#stats-memcache").slideDown();
+	    });
 		$("img.logo").click(function(evt) {
 			var key = this.alt;
 			$.get("/details/"+key,function(data) {
@@ -41,23 +44,25 @@
     <li>{{entry.content}}</li>
     {% endfor %}
     </ul>
+
     <form action="/sign" method="post">
     <textarea name="content" rows="3" cols="60"></textarea>
     <br/>
-    <input class="button" name="sign" type="submit" value="sign">
+    <input class="button" name="sign" type="submit" value="sign" />
     <a class="button" href="/clear">clear entries</a>
     <a class="button" href="/clear-cache">clear cache</a>
+	<div id="stats-memcache-button"> </div>
     </form>
 
 	{% if stats %}
-	<p class="stats">
+	<div class="ui-helper-hidden" id="stats-memcache">
 	hits: {{stats.hits}}<br/>
 	misses: {{stats.misses}}<br/>
 	bytes_hits: {{stats.byte_hits}}<br/>
 	items: {{stats.items}}<br/>
 	bytes: {{stats.bytes}}<br/>
 	oldest_item_age: {{stats.oldest_item_age}}<br/>
-	</p>
+	</div>
 	{% endif %}
 {% endblock %}
 
