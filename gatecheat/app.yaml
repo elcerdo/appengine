@@ -1,0 +1,63 @@
+application: gatecheat
+version: 1a
+runtime: python
+api_version: 1
+
+skip_files:
+- ^(.*/)?cron\.yaml
+- ^(.*/)?cron\.yml
+- ^(.*/)?bulkloader\.yaml
+- ^(.*/)?bulkloader\.yml
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^(.*/)?.*\.xml
+- ^(.*/)?.*\.sh
+- ^(.*/)?.*\.sqlite3
+- ^(.*/)?.*\.log
+- ^(.*/)?Logo-image
+- ^(.*/)?mytransform\.py
+
+handlers:
+#
+# static data
+#
+#- url: /favicon.ico
+#  static_files: static/favicon.ico
+#  upload: static/favicon.ico
+#
+#- url: /static/(.*\.png)
+#  static_files: static/\1
+#  upload: static/.*\.png
+#
+- url: /js
+  static_dir: js
+
+- url: /css
+  static_dir: css
+
+#
+# script routing
+#
+#- url: /job/.*
+#  script: job.py
+#  login: admin
+#
+#- url: /logo/.*
+#  script: logo.py
+#
+#- url: /details/.*
+#  script: logo.py
+
+- url: /.*
+  script: index.py
+
+#builtins:
+#- remote_api: on
+

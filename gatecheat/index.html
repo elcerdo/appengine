@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+<script type="text/javascript">
+	$(function() {
+		$(".button").button();
+		$("#nprimaries").autocomplete({source: ["1e5","1e6","1e7","1e8","1e9"]});
+		{% if timeresult %}$("#timeprogress").progressbar({value:{{timeresult.progress}}});{% endif %}
+	});
+</script>
+{% endblock %}
+
+<p>nevent = {{timeresult.nevent}}, elapsed = {{timeresult.elapsed}}, startdate = {{timeresult.startdate}}, enddate = {{timeresult.enddate}}, nprimaries = {{timeresult.nprimaries}}, remaining = {{timeresult.remaining}}</p>
+
+{% block content %}
+<h1>when will it be over??</h1>
+
+    <form action="" method="get">
+    paste stat file:<br/>
+    <textarea name="content" rows="10" cols="80"></textarea><br/>
+    number of primaries:<br/>
+    <input name="nprimaries" id="nprimaries"><br/>
+    <input class="button" name="timesubmit" type="submit" value="submit"/>
+    </form>
+
+    {% if timeresult %}
+    <div id="time-result" class="ui-corner-all">
+	    <div id="timeprogress" class="ui-widget"></div>
+	    <h1 class="important">{{timeresult.remaining}} remaining</h1>
+    </div>
+    {% endif %}
+{% endblock %}
+

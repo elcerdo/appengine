@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="icon" type="image/ico" href="/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/css/ui-lightness/jquery-ui-1.8.6.custom.css" />
+	<link rel="stylesheet" type="text/css" href="/css/screen.css" />
+	<script type="text/javascript" src="/js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui-1.8.6.custom.min.js"></script>
+	<title>gate cheat sheet{% block title %}{% if title %} - {{title}}{% endif %}{% endblock %}</title>
+	{% block extrahead %}
+	{% endblock %}
+</head>
+<body>
+    <div id="main-container" class="ui-corner-all">
+	<div id="main-title" class="ui-corner-all ui-widget-header">GATE CHEAT SHEET</div>
+	<div id="main-content">
+	{% block content %}
+	{% endblock %}
+	</div>
+    </div>
+</body>
+</html>
+
+
