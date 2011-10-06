@@ -10,7 +10,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-re_headerimg     = re.compile(r'''<img +id=('header-img'|"header-img") +src=['"]([a-zA-Z/:.0-9_?=]+)['"] +.*>''')
+re_headerimg     = re.compile(r'''<img +src="([^"]+)" +[a-z]+="[^"]+" +id=('header-img'|"header-img") +.*>''')
 re_headercomment = re.compile(r'''<a +title="([^"]+)" +.*>''')
 
 class Fetch(webapp.RequestHandler):
@@ -41,11 +41,11 @@ class Fetch(webapp.RequestHandler):
 
         match = re_headerimg.search(reddit_frontpage.content)
         if match is None:
-            items.append({"title":"failed to find reddit logo image","status":"err"})
+            items.append({"title":"failed to find reddit logo image","data":cgi.escape(reddit_frontpage.content),"status":"err"})
             finish_job()
             send_mail(repr(items))
             return
-        reddit_logo_url = match.groups()[1]
+        reddit_logo_url = match.groups()[0]
         items.append({"title":"found reddit logo image","status":"ok","data":cgi.escape(reddit_logo_url)})
 
         reddit_logo =  urlfetch.fetch(reddit_logo_url)
