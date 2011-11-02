@@ -10,7 +10,9 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-re_headerimg     = re.compile(r'''<img +src="([^"]+)" +[a-z]+="[^"]+" +id=('header-img'|"header-img") +.*>''')
+res_headerimg     = [
+        (re.compile(r'''<img +src="([^"]+)" +[a-z]+="[^"]+" +id=('header-img'|"header-img") +.*>'''),0),
+        (re.compile(r'''<img +id=('header-img'|"header-img") +src="([^"]+)"'''),1)]
 re_headercomment = re.compile(r'''<a +title="([^"]+)" +.*>''')
 
 class Fetch(webapp.RequestHandler):
@@ -24,10 +26,10 @@ class Fetch(webapp.RequestHandler):
             template_path   = os.path.join(os.path.dirname(__file__),"job.html")
             self.response.out.write(template.render(template_path,template_params))
         
-        def send_mail(body):
+        def send_mail(items):
             message = mail.EmailMessage(sender="elcerdo appengine <fetch-reddit@elcerdoquerie.appspotmail.com>",subject="[appengine] failed to fetch reddit logo")
             message.to = "pierre gueth <pierre.gueth@gmail.com>"
-            message.body = body
+            message.body = "\n++++++++++++++++++++++\n".join(repr(item) for item in items)
             message.send()
 
 
@@ -35,24 +37,28 @@ class Fetch(webapp.RequestHandler):
         if reddit_frontpage.status_code != 200:
             items.append({"title":"failed to get reddit frontpage","status":"err"})
             finish_job()
-            send_mail(repr(items))
+            send_mail(items)
             return
         items.append({"title":"got reddit frontpage","status":"ok","data":cgi.escape("size=%d" % len(reddit_frontpage.content))})
 
-        match = re_headerimg.search(reddit_frontpage.content)
+        match = None
+        for re_headerimg,position in res_headerimg:
+            match = re_headerimg.search(reddit_frontpage.content)
+            if match is not None:
+                reddit_logo_url = match.groups()[position]
+                break
         if match is None:
             items.append({"title":"failed to find reddit logo image","data":cgi.escape(reddit_frontpage.content),"status":"err"})
             finish_job()
-            send_mail(repr(items))
+            send_mail(items)
             return
-        reddit_logo_url = match.groups()[0]
         items.append({"title":"found reddit logo image","status":"ok","data":cgi.escape(reddit_logo_url)})
 
         reddit_logo =  urlfetch.fetch(reddit_logo_url)
         if reddit_frontpage.status_code != 200:
             items.append({"title":"failed to get reddit logo","status":"err"})
             finish_job()
-            send_mail(repr(items))
+            send_mail(items)
             return
         items.append({"title":"got reddit logo","status":"ok"})
 
