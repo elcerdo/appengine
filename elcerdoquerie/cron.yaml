@@ -1,6 +1,2 @@
-cron:
-- description: reddit logo fetching
-  url: /job/fetch-reddit
-  schedule: every 24 hours
 
 
