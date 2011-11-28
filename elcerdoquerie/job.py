@@ -32,6 +32,8 @@ class Fetch(webapp.RequestHandler):
             message.body = "\n++++++++++++++++++++++\n".join(repr(item) for item in items)
             message.send()
 
+        finish_job()
+
 
         reddit_frontpage = urlfetch.fetch("http://www.reddit.com")
         if reddit_frontpage.status_code != 200:
